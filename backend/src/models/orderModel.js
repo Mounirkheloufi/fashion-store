@@ -32,7 +32,26 @@ async function getOrdersByUserId(userId) {
     return orders;
 }
 
+async function getOrderItems(orderId) {
+    const [items] = await pool.query(
+        "SELECT oi.id, oi.order_id, oi.product_id, oi.quantity, oi.price, p.name, p.image From order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = ?",
+        [orderId]
+    );
+    return items;
+}
+
+async function updateOrderStatus(orderId, status) {
+    await pool.query(
+        "UPDATE orders SET status = ? WHERE id = ?",
+        [status, orderId]
+    );
+    return { id: orderId, status };
+}
+
+
 module.exports = {
     createOrder,
-    getOrdersByUserId
+    getOrdersByUserId,
+    getOrderItems,
+    updateOrderStatus
 };

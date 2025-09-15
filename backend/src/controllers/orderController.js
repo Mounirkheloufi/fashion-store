@@ -22,7 +22,30 @@ async function getMyOrders(req, res, next) {
     }   
 }
 
+async function getOrderItemsHandler(req, res, next) {
+    try {
+        const orderId = req.params.id;
+        const items = await Order.getOrderItems(orderId);
+        res.json(items);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function updateOrderStatusHandler(req, res, next) {
+    try {
+        const { status } = req.body;
+        const orderId = req.params.id;
+        const updated = await Order.updateOrderStatus(orderId, status);
+        res.json(updated);
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     createOrderHandler,
-    getMyOrders
+    getMyOrders,
+    getOrderItemsHandler,
+    updateOrderStatusHandler
 };
