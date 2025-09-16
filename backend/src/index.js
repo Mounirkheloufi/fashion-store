@@ -17,6 +17,9 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// generate pdf facture
+app.use('/invoices', express.static('invoices'));
+
 // Test route
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
