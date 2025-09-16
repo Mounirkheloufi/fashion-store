@@ -1,4 +1,6 @@
 const Cart = require('../models/cartModel');
+const Order = require('../models/orderModel');
+const db = require('../config/db');
 
 async function getCartHandler(req, res, next) {
     try {
@@ -82,11 +84,78 @@ async function clearCartHandler(req, res, next) {
         next(error);
     }
 }
+
+async function checkoutHandler(req, res, next) {
+    try {
+        const userId = req.user.id;
+
+        const cart = await Cart.findOrCreateCart(userId);
+        const items = await Cart.getCartItems(cart.id);
+
+        if(!items || items.length === 0) {
+            return res.status(400).json({ error: "Cart is empty" });
+        }
+
+        let total = 0;
+        const orderItems = [];
+
+        for (const item of items) {
+            const itemPrice = parseFloat(item.price);
+            const itemTotal = itemPrice * item.quantity;
+            total += itemTotal;
+
+            orderItems.push({
+                productId: item.product_id,
+                quantity: item.quantity,
+                price: itemPrice
+            });
+
+            const [productRows] = await db.query(
+                "SELECT stock FROM products WHERE id = ?",
+                [item.product_id]
+            );
+
+            if(productRows.length === 0 || productRows[0].stock < item.quantity) {
+                return res.status(400).json({ error: `Not enough stock for product ${item.product_id}` });
+            }
+
+            await db.query(
+                "UPDATE products SET stock = stock - ? WHERE id = ?",
+                [item.quantity, item.product_id]
+            );
+        }
+
+        const [orderResult] = await db.query(
+            "INSERT INTO orders (user_id, total, status) VALUES (?, ?, ?)",
+            [userId, total.toFixed(2), "pending"]
+        );
+
+        const orderId = orderResult.insertId;
+
+        for (const item of orderItems) {
+            await db.query(
+                "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)",
+                [orderId, item.productId, item.quantity, item.price]
+            );
+        }
+
+        await Cart.clearCart(cart.id);
+        res.status(201).json({
+            message: "checkout successful. Order created.",
+            orderId,
+            total: total.toFixed(2),
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getCartHandler,
     addToCartHandler,
     addManyToCartHandler,
     updateCartItemHandler,
     deleteCartItemHandler,
-    clearCartHandler
+    clearCartHandler,
+    checkoutHandler
 };
