@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import { Layout } from 'antd'
+import Navbar from './components/ui/Navbar'
+import AppFooter from './components/ui/Footer'
+import Home from './pages/Home'
+import Shop from './pages/Shop'
+import ProductPage from './pages/ProductPage'
+import CartPage from './pages/CartPage'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import Blogs from './pages/Blogs'
+import AdminDashboard from './pages/AdminDashboard'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const { Content } = Layout
+
+
+export default function App() {
+return (
+<Layout style={{ minHeight: '100vh' }}>
+<Navbar />
+<Content style={{ padding: '24px 48px', marginTop: 64 }}>
+<Routes>
+<Route path="/" element={<Home />} />
+<Route path="/shop" element={<Shop />} />
+<Route path="/product/:id" element={<ProductPage />} />
+<Route path="/cart" element={<CartPage />} />
+<Route path="/login" element={<Login />} />
+<Route path="/register" element={<Register />} />
+<Route path="/blogs" element={<Blogs />} />
+<Route path="/admin" element={<AdminDashboard />} />
+</Routes>
+</Content>
+<AppFooter />
+</Layout>
+)
 }
-
-export default App;
