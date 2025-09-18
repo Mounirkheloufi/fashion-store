@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const swaggerDocs = require("./config/swagger");
-require("dotenv").config();
+require("dotenv").config({ path: "../.env" });
 
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
