@@ -11,6 +11,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Blogs from './pages/Blogs'
 import AdminDashboard from './pages/AdminDashboard'
+import Profile from './pages/ProfilePage'
 
 
 const { Content } = Layout
@@ -29,6 +30,7 @@ return (
 <Route path="/login" element={<Login />} />
 <Route path="/register" element={<Register />} />
 <Route path="/blogs" element={<Blogs />} />
+<Route path="/profile" element={<Profile />} />
 <Route path="/admin" element={<AdminDashboard />} />
 </Routes>
 </Content>
