@@ -2,21 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Badge, Drawer, Button, Avatar, Dropdown } from 'antd'
 import { ShoppingCartOutlined, MenuOutlined, CloseOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../store'
+import { logout } from '../../store/userSlice' // Importez votre action logout
 
 const Navbar: React.FC = () => {
     const [open, setOpen] = useState(false)
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+    
+    // Utilisation de Redux pour l'état utilisateur
+    const dispatch = useDispatch()
+    const { token, user } = useSelector((state: RootState) => state.user)
     const items = useSelector((s: RootState) => s.cart.items || [])
     const navigate = useNavigate()
 
-    // État d'authentification - remplacez par votre vraie logique
-    const [isAuthenticated, setIsAuthenticated] = useState(true) // Changé à true pour tester
-    const [user] = useState({
-        name: 'Marie Dubois',
-        avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face' // Photo test
-    })
+    // L'utilisateur est authentifié s'il y a un token ET un user
+    const isAuthenticated = !!(token && user)
 
     // Gérer le responsive
     useEffect(() => {
@@ -36,9 +37,9 @@ const Navbar: React.FC = () => {
     ]
 
     const handleLogout = () => {
-        setIsAuthenticated(false)
-        navigate('/')
-        console.log('Déconnexion...')
+        dispatch(logout()) // Utilisation de l'action Redux
+        navigate('/') // Redirection vers la page d'accueil
+        setOpen(false) // Fermer le drawer si ouvert
     }
 
     const userMenuItems = [
@@ -170,7 +171,7 @@ const Navbar: React.FC = () => {
                             {/* Desktop Auth Section - Cachée sur mobile */}
                             {!isMobile && (
                                 <div style={styles.desktopAuth}>
-                                    {isAuthenticated ? (
+                                    {isAuthenticated && user ? (
                                         <Dropdown 
                                             menu={{ items: userMenuItems }} 
                                             placement="bottomRight"
@@ -191,8 +192,8 @@ const Navbar: React.FC = () => {
                                                 }}
                                             >
                                                 <Avatar 
-                                                    src={user.avatar} 
-                                                    icon={!user.avatar ? <UserOutlined /> : undefined}
+                                                    src={user.profile_picture} 
+                                                    icon={!user.profile_picture ? <UserOutlined /> : undefined}
                                                     style={styles.avatar}
                                                 />
                                                 <div style={styles.userInfo}>
@@ -253,23 +254,21 @@ const Navbar: React.FC = () => {
                         
                         {/* User Section in Drawer */}
                         <div style={styles.drawerUserSection}>
-                            {isAuthenticated ? (
+                            {isAuthenticated && user ? (
                                 <div style={styles.drawerUserProfile}>
                                     <Avatar 
-                                        src={user.avatar} 
-                                        icon={!user.avatar ? <UserOutlined /> : undefined}
+                                        src={user.profile_picture} 
+                                        icon={!user.profile_picture ? <UserOutlined /> : undefined}
                                         style={styles.drawerAvatar}
                                     />
                                     <div style={styles.drawerUserInfo}>
                                         <div style={styles.drawerUserName}>{user.name}</div>
+                                        <div style={styles.drawerUserEmail}>{user.email}</div>
                                         <Button 
                                             type="link" 
                                             size="small" 
                                             icon={<LogoutOutlined />}
-                                            onClick={() => {
-                                                handleLogout()
-                                                setOpen(false)
-                                            }}
+                                            onClick={handleLogout}
                                             style={styles.logoutBtn}
                                         >
                                             Déconnexion
@@ -338,7 +337,9 @@ const Navbar: React.FC = () => {
                 <div style={styles.drawerFooter}>
                     <div style={styles.drawerFooterContent}>
                         <h3 style={styles.drawerFooterTitle}>Fashion Store</h3>
-                        <p style={styles.drawerFooterSubtitle}>Votre destination mode</p>
+                        <p style={styles.drawerFooterSubtitle}>
+                            {isAuthenticated && user ? `Bienvenue, ${user.name.split(' ')[0]}!` : 'Votre destination mode'}
+                        </p>
                     </div>
                 </div>
             </Drawer>
@@ -570,25 +571,33 @@ const styles = {
     },
     drawerUserProfile: {
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         gap: '12px',
-        padding: '8px',
+        padding: '12px',
         backgroundColor: '#f8fafc',
         borderRadius: '12px'
     },
     drawerAvatar: {
-        width: '44px',
-        height: '44px',
-        border: '2px solid #667eea'
+        width: '48px',
+        height: '48px',
+        border: '2px solid #667eea',
+        flexShrink: 0
     },
     drawerUserInfo: {
-        flex: 1
+        flex: 1,
+        minWidth: 0
     },
     drawerUserName: {
         fontWeight: '600',
         color: '#1f2937',
         fontSize: '15px',
-        marginBottom: '4px'
+        marginBottom: '2px'
+    },
+    drawerUserEmail: {
+        fontSize: '12px',
+        color: '#6b7280',
+        marginBottom: '6px',
+        wordBreak: 'break-all' as const
     },
     logoutBtn: {
         padding: '0',
