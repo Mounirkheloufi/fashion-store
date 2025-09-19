@@ -4,7 +4,7 @@ import { Badge, Drawer, Button, Avatar, Dropdown } from 'antd'
 import { ShoppingCartOutlined, MenuOutlined, CloseOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../store'
-import { logout } from '../../store/userSlice' // Importez votre action logout
+import { logout } from '../../store/userSlice'
 
 const Navbar: React.FC = () => {
     const [open, setOpen] = useState(false)
@@ -37,16 +37,16 @@ const Navbar: React.FC = () => {
     ]
 
     const handleLogout = () => {
-        dispatch(logout()) // Utilisation de l'action Redux
-        navigate('/') // Redirection vers la page d'accueil
-        setOpen(false) // Fermer le drawer si ouvert
+        dispatch(logout())
+        navigate('/')
+        setOpen(false)
     }
 
     const userMenuItems = [
         {
             key: 'profile',
             label: (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="flex items-center gap-2">
                     <UserOutlined />
                     Mon Profil
                 </div>
@@ -59,7 +59,7 @@ const Navbar: React.FC = () => {
         {
             key: 'logout',
             label: (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ef4444' }}>
+                <div className="flex items-center gap-2 text-red-500">
                     <LogoutOutlined />
                     Déconnexion
                 </div>
@@ -70,68 +70,49 @@ const Navbar: React.FC = () => {
 
     return (
         <>
-            <nav style={styles.navbar}>
-                <div style={styles.container}>
-                    <div style={styles.navContent}>
+            <nav className="sticky top-0 z-[1000] bg-white shadow-lg border-b border-gray-100">
+                <div className="max-w-[1200px] mx-auto px-5">
+                    <div className="flex justify-between items-center h-[70px]">
                         {/* Logo */}
                         <div 
-                            style={styles.logoContainer}
+                            className="flex items-center gap-3 cursor-pointer group"
                             onClick={() => navigate('/')}
-                            onMouseEnter={(e) => {
-                                const icon = e.currentTarget.querySelector('.logo-icon') as HTMLElement
-                                if (icon) icon.style.transform = 'scale(1.1) rotate(5deg)'
-                            }}
-                            onMouseLeave={(e) => {
-                                const icon = e.currentTarget.querySelector('.logo-icon') as HTMLElement
-                                if (icon) icon.style.transform = 'scale(1) rotate(0deg)'
-                            }}
                         >
-                            <div style={styles.logoIconWrapper}>
-                                <div style={styles.logoIcon} className="logo-icon">
-                                    <ShoppingCartOutlined style={styles.logoIconSvg} />
+                            <div className="relative">
+                                <div className="w-[45px] h-[45px] bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[14px] flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[5deg] logo-icon">
+                                    <ShoppingCartOutlined className="text-[22px] text-white" />
                                 </div>
-                                <div style={styles.logoDot}></div>
+                                <div className="absolute -top-1 -right-1 w-[14px] h-[14px] bg-pink-500 rounded-full animate-pulse"></div>
                             </div>
                             <div>
-                                <h1 style={styles.logoTitle}>Fashion Store</h1>
-                                <p style={styles.logoSubtitle}>Mode & Style</p>
+                                <h1 className="text-[22px] font-bold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent m-0 leading-tight">
+                                    Fashion Store
+                                </h1>
+                                <p className="text-[12px] text-gray-500 m-0 -mt-0.5">Mode & Style</p>
                             </div>
                         </div>
 
                         {/* Navigation Desktop - Cachée sur mobile */}
                         {!isMobile && (
-                            <div style={styles.desktopNav}>
+                            <div className="flex items-center gap-2">
                                 {navLinks.map((link, index) => (
                                     <Link
                                         key={index}
                                         to={link.path}
-                                        style={styles.navLink}
+                                        className="relative px-5 py-3 text-gray-700 font-medium no-underline rounded-lg transition-all duration-300 hover:text-indigo-500 hover:-translate-y-0.5 nav-link"
                                         onMouseEnter={(e) => {
                                             const target = e.target as HTMLElement
-                                            target.style.color = '#667eea'
-                                            target.style.transform = 'translateY(-2px)'
                                             const underline = document.createElement('div')
-                                            underline.className = 'nav-underline'
-                                            underline.style.cssText = `
-                                                position: absolute;
-                                                bottom: 8px;
-                                                left: 50%;
-                                                transform: translateX(-50%);
-                                                width: 0;
-                                                height: 2px;
-                                                background: #667eea;
-                                                transition: width 0.3s ease;
-                                                border-radius: 1px;
-                                            `
+                                            underline.className = 'nav-underline absolute bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-indigo-500 transition-all duration-300 rounded-sm'
                                             if (!target.querySelector('.nav-underline')) {
                                                 target.appendChild(underline)
-                                                setTimeout(() => underline.style.width = '80%', 10)
+                                                setTimeout(() => {
+                                                    underline.style.width = '80%'
+                                                }, 10)
                                             }
                                         }}
                                         onMouseLeave={(e) => {
                                             const target = e.target as HTMLElement
-                                            target.style.color = '#374151'
-                                            target.style.transform = 'translateY(0)'
                                             const underline = target.querySelector('.nav-underline')
                                             if (underline) {
                                                 (underline as HTMLElement).style.width = '0'
@@ -146,31 +127,22 @@ const Navbar: React.FC = () => {
                         )}
 
                         {/* Actions */}
-                        <div style={styles.actions}>
+                        <div className="flex items-center gap-4">
                             {/* Cart Icon */}
-                            <div 
-                                style={styles.cartContainer}
-                                onMouseEnter={(e) => {
-                                    const target = e.currentTarget as HTMLElement
-                                    target.style.transform = 'scale(1.1)'
-                                    const icon = target.querySelector('.cart-icon') as HTMLElement
-                                    if (icon) icon.style.animation = 'bounce 0.6s ease'
-                                }}
-                                onMouseLeave={(e) => {
-                                    const target = e.currentTarget as HTMLElement
-                                    target.style.transform = 'scale(1)'
-                                }}
-                            >
+                            <div className="transition-transform duration-300 hover:scale-110 cart-container">
                                 <Badge count={items.length} overflowCount={99}>
-                                    <Link to="/cart" style={styles.cartLink}>
-                                        <ShoppingCartOutlined style={styles.cartIcon} className="cart-icon" />
+                                    <Link 
+                                        to="/cart" 
+                                        className="flex items-center justify-center w-11 h-11 bg-slate-50 rounded-xl text-gray-700 no-underline transition-all duration-300"
+                                    >
+                                        <ShoppingCartOutlined className="text-xl cart-icon" />
                                     </Link>
                                 </Badge>
                             </div>
 
                             {/* Desktop Auth Section - Cachée sur mobile */}
                             {!isMobile && (
-                                <div style={styles.desktopAuth}>
+                                <div className="flex items-center">
                                     {isAuthenticated && user ? (
                                         <Dropdown 
                                             menu={{ items: userMenuItems }} 
@@ -178,49 +150,25 @@ const Navbar: React.FC = () => {
                                             arrow
                                             trigger={['click']}
                                         >
-                                            <div 
-                                                style={styles.userProfile}
-                                                onMouseEnter={(e) => {
-                                                    const target = e.currentTarget as HTMLElement
-                                                    target.style.backgroundColor = '#f8fafc'
-                                                    target.style.transform = 'translateY(-1px)'
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    const target = e.currentTarget as HTMLElement
-                                                    target.style.backgroundColor = 'transparent'
-                                                    target.style.transform = 'translateY(0)'
-                                                }}
-                                            >
+                                            <div className="flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 border border-gray-200 hover:bg-slate-50 hover:-translate-y-px">
                                                 <Avatar 
                                                     src={user.profile_picture} 
                                                     icon={!user.profile_picture ? <UserOutlined /> : undefined}
-                                                    style={styles.avatar}
+                                                    className="w-10 h-10 border-2 border-indigo-500"
                                                 />
-                                                <div style={styles.userInfo}>
-                                                    <span style={styles.userName}>{user.name}</span>
-                                                    <span style={styles.userStatus}>En ligne</span>
+                                                <div className="flex flex-col items-start">
+                                                    <span className="font-semibold text-gray-800 text-sm leading-tight">{user.name}</span>
+                                                    <span className="text-xs text-green-500 font-medium">En ligne</span>
                                                 </div>
-                                                <div style={styles.dropdownArrow}>▼</div>
+                                                <div className="text-xs text-gray-400 ml-1">▼</div>
                                             </div>
                                         </Dropdown>
                                     ) : (
                                         <Link 
                                             to="/login"
-                                            style={styles.loginButton}
-                                            onMouseEnter={(e) => {
-                                                const target = e.target as HTMLElement
-                                                target.style.background = 'linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%)'
-                                                target.style.transform = 'scale(1.05)'
-                                                target.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)'
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                const target = e.target as HTMLElement
-                                                target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                                                target.style.transform = 'scale(1)'
-                                                target.style.boxShadow = 'none'
-                                            }}
+                                            className="flex items-center px-5 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium no-underline rounded-xl transition-all duration-300 hover:from-indigo-600 hover:to-purple-700 hover:scale-105 hover:shadow-lg hover:shadow-indigo-500/40"
                                         >
-                                            <UserOutlined style={{ marginRight: '8px' }} />
+                                            <UserOutlined className="mr-2" />
                                             Connexion
                                         </Link>
                                     )}
@@ -231,9 +179,9 @@ const Navbar: React.FC = () => {
                             {isMobile && (
                                 <Button
                                     type="text"
-                                    icon={<MenuOutlined style={styles.mobileMenuIcon} />}
+                                    icon={<MenuOutlined className="text-xl text-gray-700" />}
                                     onClick={() => setOpen(true)}
-                                    style={styles.mobileMenuButton}
+                                    className="w-11 h-11 flex items-center justify-center rounded-xl border-0 shadow-none bg-slate-50"
                                 />
                             )}
                         </div>
@@ -244,32 +192,32 @@ const Navbar: React.FC = () => {
             {/* Mobile Drawer */}
             <Drawer
                 title={
-                    <div style={styles.drawerHeader}>
-                        <div style={styles.drawerTitle}>
-                            <div style={styles.drawerIcon}>
-                                <ShoppingCartOutlined style={styles.drawerIconSvg} />
+                    <div className="flex flex-col gap-4">
+                        <div className="flex items-center gap-2.5">
+                            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[10px] flex items-center justify-center">
+                                <ShoppingCartOutlined className="text-lg text-white" />
                             </div>
-                            <span style={styles.drawerTitleText}>Menu</span>
+                            <span className="font-semibold text-gray-800 text-lg">Menu</span>
                         </div>
                         
                         {/* User Section in Drawer */}
-                        <div style={styles.drawerUserSection}>
+                        <div className="pt-3 border-t border-gray-100">
                             {isAuthenticated && user ? (
-                                <div style={styles.drawerUserProfile}>
+                                <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
                                     <Avatar 
                                         src={user.profile_picture} 
                                         icon={!user.profile_picture ? <UserOutlined /> : undefined}
-                                        style={styles.drawerAvatar}
+                                        className="w-12 h-12 border-2 border-indigo-500 flex-shrink-0"
                                     />
-                                    <div style={styles.drawerUserInfo}>
-                                        <div style={styles.drawerUserName}>{user.name}</div>
-                                        <div style={styles.drawerUserEmail}>{user.email}</div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="font-semibold text-gray-800 text-[15px] mb-0.5">{user.name}</div>
+                                        <div className="text-xs text-gray-500 mb-1.5 break-all">{user.email}</div>
                                         <Button 
                                             type="link" 
                                             size="small" 
                                             icon={<LogoutOutlined />}
                                             onClick={handleLogout}
-                                            style={styles.logoutBtn}
+                                            className="p-0 h-auto text-red-500 text-xs font-medium"
                                         >
                                             Déconnexion
                                         </Button>
@@ -278,10 +226,10 @@ const Navbar: React.FC = () => {
                             ) : (
                                 <Link 
                                     to="/login" 
-                                    style={styles.drawerLoginBtn}
+                                    className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white no-underline rounded-xl text-sm font-medium"
                                     onClick={() => setOpen(false)}
                                 >
-                                    <UserOutlined style={{ marginRight: '8px' }} />
+                                    <UserOutlined className="mr-2" />
                                     Se connecter
                                 </Link>
                             )}
@@ -292,40 +240,28 @@ const Navbar: React.FC = () => {
                 onClose={() => setOpen(false)}
                 open={open}
                 width={320}
-                closeIcon={<CloseOutlined style={styles.closeIcon} />}
+                closeIcon={<CloseOutlined className="text-gray-500 text-base" />}
             >
-                <div style={styles.drawerContent}>
+                <div className="flex flex-col gap-1.5 mt-6">
                     {[...navLinks, { path: '/cart', label: 'Panier' }].map((link, index) => (
                         <Link
                             key={index}
                             to={link.path}
                             onClick={() => setOpen(false)}
-                            style={styles.drawerLink}
-                            onMouseEnter={(e) => {
-                                const target = e.target as HTMLElement
-                                target.style.color = '#667eea'
-                                target.style.backgroundColor = '#f3f4ff'
-                                target.style.transform = 'translateX(8px)'
-                            }}
-                            onMouseLeave={(e) => {
-                                const target = e.target as HTMLElement
-                                target.style.color = '#374151'
-                                target.style.backgroundColor = 'transparent'
-                                target.style.transform = 'translateX(0)'
-                            }}
+                            className="flex items-center justify-between px-5 py-4 text-gray-700 no-underline rounded-xl font-medium transition-all duration-300 hover:text-indigo-500 hover:bg-indigo-50 hover:translate-x-2"
                         >
-                            <div style={styles.drawerLinkContent}>
+                            <div className="flex items-center gap-4">
                                 {link.path === '/cart' ? (
                                     <Badge count={items.length} size="small">
-                                        <ShoppingCartOutlined style={styles.drawerLinkIcon} />
+                                        <ShoppingCartOutlined className="text-lg" />
                                     </Badge>
                                 ) : (
-                                    <div style={styles.drawerLinkDot}></div>
+                                    <div className="w-2 h-2 bg-slate-300 rounded-full"></div>
                                 )}
                                 <span>{link.label}</span>
                             </div>
                             {link.path === '/cart' && items.length > 0 && (
-                                <span style={styles.cartCount}>
+                                <span className="text-xs text-indigo-500 font-bold bg-indigo-50 px-2 py-1 rounded-xl min-w-[24px] text-center">
                                     {items.length}
                                 </span>
                             )}
@@ -334,17 +270,17 @@ const Navbar: React.FC = () => {
                 </div>
 
                 {/* Mobile Footer */}
-                <div style={styles.drawerFooter}>
-                    <div style={styles.drawerFooterContent}>
-                        <h3 style={styles.drawerFooterTitle}>Fashion Store</h3>
-                        <p style={styles.drawerFooterSubtitle}>
+                <div className="absolute bottom-5 left-5 right-5">
+                    <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-5 text-white text-center">
+                        <h3 className="font-bold m-0 mb-1.5 text-lg">Fashion Store</h3>
+                        <p className="text-sm opacity-90 m-0">
                             {isAuthenticated && user ? `Bienvenue, ${user.name.split(' ')[0]}!` : 'Votre destination mode'}
                         </p>
                     </div>
                 </div>
             </Drawer>
 
-            {/* CSS Animations */}
+            {/* CSS Animations - Nécessaires pour les animations personnalisées */}
             <style>{`
                 @keyframes pulse {
                     0%, 100% { opacity: 0.8; transform: scale(1); }
@@ -358,335 +294,12 @@ const Navbar: React.FC = () => {
                     75% { transform: translateY(-5px); }
                 }
                 
-                .logo-icon {
-                    transition: transform 0.3s ease !important;
+                .cart-container:hover .cart-icon {
+                    animation: bounce 0.6s ease;
                 }
             `}</style>
         </>
     )
-}
-
-const styles = {
-    navbar: {
-        position: 'sticky' as const,
-        top: 0,
-        zIndex: 1000,
-        backgroundColor: '#ffffff',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-        borderBottom: '1px solid #f0f0f0'
-    },
-    container: {
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '0 20px'
-    },
-    navContent: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        height: '70px'
-    },
-    logoContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        cursor: 'pointer'
-    },
-    logoIconWrapper: {
-        position: 'relative' as const
-    },
-    logoIcon: {
-        width: '45px',
-        height: '45px',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        borderRadius: '14px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        transition: 'transform 0.3s ease'
-    },
-    logoIconSvg: {
-        fontSize: '22px',
-        color: '#ffffff'
-    },
-    logoDot: {
-        position: 'absolute' as const,
-        top: '-4px',
-        right: '-4px',
-        width: '14px',
-        height: '14px',
-        backgroundColor: '#ec4899',
-        borderRadius: '50%',
-        animation: 'pulse 2s infinite'
-    },
-    logoTitle: {
-        fontSize: '22px',
-        fontWeight: '700',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        margin: 0,
-        lineHeight: 1.2
-    },
-    logoSubtitle: {
-        fontSize: '12px',
-        color: '#6b7280',
-        margin: 0,
-        marginTop: '-2px'
-    },
-    desktopNav: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px'
-    },
-    navLink: {
-        position: 'relative' as const,
-        padding: '12px 20px',
-        color: '#374151',
-        fontWeight: '500',
-        textDecoration: 'none',
-        borderRadius: '8px',
-        transition: 'all 0.3s ease'
-    },
-    actions: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '16px'
-    },
-    cartContainer: {
-        transition: 'transform 0.3s ease'
-    },
-    cartLink: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '44px',
-        height: '44px',
-        backgroundColor: '#f8fafc',
-        borderRadius: '12px',
-        color: '#374151',
-        textDecoration: 'none',
-        transition: 'all 0.3s ease'
-    },
-    cartIcon: {
-        fontSize: '20px'
-    },
-    desktopAuth: {
-        display: 'flex',
-        alignItems: 'center'
-    },
-    userProfile: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        padding: '8px 16px',
-        borderRadius: '12px',
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-        border: '1px solid #e5e7eb'
-    },
-    avatar: {
-        width: '40px',
-        height: '40px',
-        border: '2px solid #667eea'
-    },
-    userInfo: {
-        display: 'flex',
-        flexDirection: 'column' as const,
-        alignItems: 'flex-start'
-    },
-    userName: {
-        fontWeight: '600',
-        color: '#1f2937',
-        fontSize: '14px',
-        lineHeight: 1.2
-    },
-    userStatus: {
-        fontSize: '12px',
-        color: '#10b981',
-        fontWeight: '500'
-    },
-    dropdownArrow: {
-        fontSize: '10px',
-        color: '#9ca3af',
-        marginLeft: '4px'
-    },
-    loginButton: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: '12px 20px',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: '#ffffff',
-        fontWeight: '500',
-        textDecoration: 'none',
-        borderRadius: '12px',
-        transition: 'all 0.3s ease'
-    },
-    mobileMenuButton: {
-        width: '44px',
-        height: '44px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '12px',
-        border: 'none',
-        boxShadow: 'none',
-        backgroundColor: '#f8fafc'
-    },
-    mobileMenuIcon: {
-        fontSize: '20px',
-        color: '#374151'
-    },
-    drawerHeader: {
-        display: 'flex',
-        flexDirection: 'column' as const,
-        gap: '16px'
-    },
-    drawerTitle: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px'
-    },
-    drawerIcon: {
-        width: '36px',
-        height: '36px',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        borderRadius: '10px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    drawerIconSvg: {
-        fontSize: '18px',
-        color: '#ffffff'
-    },
-    drawerTitleText: {
-        fontWeight: '600',
-        color: '#1f2937',
-        fontSize: '18px'
-    },
-    drawerUserSection: {
-        paddingTop: '12px',
-        borderTop: '1px solid #f0f0f0'
-    },
-    drawerUserProfile: {
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '12px',
-        padding: '12px',
-        backgroundColor: '#f8fafc',
-        borderRadius: '12px'
-    },
-    drawerAvatar: {
-        width: '48px',
-        height: '48px',
-        border: '2px solid #667eea',
-        flexShrink: 0
-    },
-    drawerUserInfo: {
-        flex: 1,
-        minWidth: 0
-    },
-    drawerUserName: {
-        fontWeight: '600',
-        color: '#1f2937',
-        fontSize: '15px',
-        marginBottom: '2px'
-    },
-    drawerUserEmail: {
-        fontSize: '12px',
-        color: '#6b7280',
-        marginBottom: '6px',
-        wordBreak: 'break-all' as const
-    },
-    logoutBtn: {
-        padding: '0',
-        height: 'auto',
-        color: '#ef4444',
-        fontSize: '12px',
-        fontWeight: '500'
-    },
-    drawerLoginBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: '12px 16px',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: '#ffffff',
-        textDecoration: 'none',
-        borderRadius: '12px',
-        fontSize: '14px',
-        fontWeight: '500',
-        width: '100%',
-        justifyContent: 'center'
-    },
-    closeIcon: {
-        color: '#6b7280',
-        fontSize: '16px'
-    },
-    drawerContent: {
-        display: 'flex',
-        flexDirection: 'column' as const,
-        gap: '6px',
-        marginTop: '24px'
-    },
-    drawerLink: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '16px 20px',
-        color: '#374151',
-        textDecoration: 'none',
-        borderRadius: '12px',
-        fontWeight: '500',
-        transition: 'all 0.3s ease'
-    },
-    drawerLinkContent: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '16px'
-    },
-    drawerLinkIcon: {
-        fontSize: '18px'
-    },
-    drawerLinkDot: {
-        width: '8px',
-        height: '8px',
-        backgroundColor: '#cbd5e1',
-        borderRadius: '50%'
-    },
-    cartCount: {
-        fontSize: '12px',
-        color: '#667eea',
-        fontWeight: '700',
-        backgroundColor: '#f3f4ff',
-        padding: '4px 8px',
-        borderRadius: '12px',
-        minWidth: '24px',
-        textAlign: 'center' as const
-    },
-    drawerFooter: {
-        position: 'absolute' as const,
-        bottom: '20px',
-        left: '20px',
-        right: '20px'
-    },
-    drawerFooterContent: {
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        borderRadius: '16px',
-        padding: '20px',
-        color: '#ffffff',
-        textAlign: 'center' as const
-    },
-    drawerFooterTitle: {
-        fontWeight: '700',
-        margin: '0 0 6px 0',
-        fontSize: '18px'
-    },
-    drawerFooterSubtitle: {
-        fontSize: '14px',
-        opacity: 0.9,
-        margin: 0
-    }
 }
 
 export default Navbar
