@@ -15,6 +15,8 @@ return (
 <img src={product.image} style={{ width:300, height:300, objectFit:'cover' }} />
 <p>{product.description}</p>
 <p>{product.price} DA</p>
+<p>Category: {product.category}</p>
+<p>Stock: {product.stock}</p>
 <Button type="primary">Add to cart</Button>
 </div>
 )
