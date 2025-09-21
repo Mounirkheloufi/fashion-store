@@ -1,36 +1,50 @@
-import React, { useEffect } from 'react'
-import { Button, List, Typography } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchCart } from '../store/cartSlice'
-import type { RootState } from '../store'
-import API from '../api/api'
+import React, { useEffect } from "react";
+import { Button, List, Typography } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart, checkout, deleteCartItem } from "../store/cartSlice";
+import type { RootState } from "../store";
 
+export default function CartPage() {
+  const dispatch = useDispatch();
+  const { items } = useSelector((s: RootState) => s.cart);
 
-export default function CartPage(){
-const dispatch = useDispatch()
-const { cart, items } = useSelector((s:RootState)=> s.cart)
+  useEffect(() => {
+    dispatch(fetchCart() as any);
+  }, [dispatch]);
 
+  const handleCheckout = () => {
+    dispatch(checkout() as any);
+    alert("Checkout complete - invoice generated");
+  };
 
-useEffect(()=>{ dispatch(fetchCart() as any) }, [])
+  const handleRemove = (id: number) => {
+    dispatch(deleteCartItem(id) as any);
+  };
 
-
-const handleCheckout = async ()=>{
-await API.post('/cart/checkout')
-alert('Checkout complete - invoice will be available')
-dispatch(fetchCart() as any)
-}
-
-
-return (
-<div>
-<Typography.Title level={3}>Your cart</Typography.Title>
-<List dataSource={items} renderItem={(it:any)=> (
-<List.Item>
-<List.Item.Meta title={it.name} description={`Quantity: ${it.quantity}`} />
-<div>{it.price} DA</div>
-</List.Item>
-)} />
-<Button type="primary" onClick={handleCheckout} style={{ marginTop:12 }}>Checkout</Button>
-</div>
-)
+  return (
+    <div>
+      <Typography.Title level={3}>Your cart</Typography.Title>
+      <List
+        dataSource={items}
+        renderItem={(it: any) => (
+          <List.Item
+            actions={[
+              <Button size="small" danger onClick={() => handleRemove(it.id)}>
+                Remove
+              </Button>,
+            ]}
+          >
+            <List.Item.Meta
+              title={it.name}
+              description={`Quantity: ${it.quantity}`}
+            />
+            <div>{it.price} DA</div>
+          </List.Item>
+        )}
+      />
+      <Button type="primary" onClick={handleCheckout} style={{ marginTop: 12 }}>
+        Checkout
+      </Button>
+    </div>
+  );
 }
