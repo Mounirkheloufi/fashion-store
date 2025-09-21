@@ -17,15 +17,15 @@ export const addToCart = createAsyncThunk(
 export const updateCartItem = createAsyncThunk(
     "cart/update",
     async({ id, quantity }: { id: number; quantity: number })=>{
-        const res = await API.put("/cart/items/${id}", { quantity });
-        return { id, quantity: res.data.quantity };
+        const res = await API.put(`/cart/items/${id}`, { quantity });
+        return { id, quantity};
     }
 );
 
 export const deleteCartItem = createAsyncThunk(
     "cart/delete",
     async(id: number)=>{
-        await API.delete("/cart/items/${id}");
+        await API.delete(`/cart/items/${id}`);
         return id;
     }
 );
