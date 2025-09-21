@@ -21,7 +21,8 @@ export default function App() {
 return (
 <Layout style={{ minHeight: '100vh' }}>
 <Navbar />
-<Content style={{ padding: '24px 48px', marginTop: 64 }}>
+{/* style={{ padding: '5px 5px', marginTop: 5 }} */}
+<Content style ={{ marginTop: 0 }}>
 <Routes>
 <Route path="/" element={<Home />} />
 <Route path="/shop" element={<Shop />} />
