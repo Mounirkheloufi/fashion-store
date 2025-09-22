@@ -8,12 +8,21 @@ import shopBanner3 from '../assets/shop-banner3.jpg'
 import shopBanner5 from '../assets/shop-banner5.jpg'
 import shopBanner1 from '../assets/shop-banner1.jpg'
 
+const categories = ["all", "t-shirt", "ensemble", "survetement", "basket", "short", "jeans", "vestes"];
+
 export default function Home() {
     const [products, setProducts] = useState<any[]>([])
+    const [filter, setFilter] = useState("all");
     
-    useEffect(() => { 
-        API.get('/products').then(r => setProducts(r.data)).catch(() => {}) 
-    }, [])
+    // useEffect(() => { 
+    //     API.get('/products').then(r => setProducts(r.data)).catch(() => {}) 
+    // }, [])
+
+    useEffect(() => {
+        API.get('/products/featured').then(r => setProducts(r.data)).catch(() => {})
+    }, []);
+
+    const filtredProducts = filter === "all" ? products : products.filter(p => p.category === filter);
 
     const bannerSlides = [
         {
@@ -180,8 +189,20 @@ export default function Home() {
                             Découvrez notre sélection de vêtements et accessoires de mode pour un style unique et moderne.
                         </p>
                     </div>
+                    {/* Filtres de catégories */}
+                    <div className="flex flex-wrap justify-center gap-3 mb-8">
+                        {categories.map(c => (
+                            <Button
+                                key={c}
+                                type={filter === c ? "primary" : "default"}
+                                onClick={() => setFilter(c)}
+                                >
+                                    {c.toUpperCase()}
+                                </Button>
+                        ))}
+                    </div>
                     
-                    <ProductGrid products={products} />
+                    <ProductGrid products={filtredProducts} />
                 </div>
             </div>
 
