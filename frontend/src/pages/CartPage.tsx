@@ -268,7 +268,7 @@ export default function CartPage() {
             </div>
 
             {/* Promo Code */}
-            <div className="bg-white rounded-2xl shadow-sm p-6 mt-6">
+            {/* <div className="bg-white rounded-2xl shadow-sm p-6 mt-6">
               <h3 className="font-semibold text-gray-900 mb-4">Code promo</h3>
               <div className="flex gap-2">
                 <input
@@ -280,7 +280,7 @@ export default function CartPage() {
                   Appliquer
                 </Button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
