@@ -2,6 +2,7 @@ const express = require("express");
 const {
   listProducts,
   getProduct,
+  listFeaturedProducts,
   createProduct,
   updateProduct,
   removeProduct,
@@ -43,6 +44,18 @@ router.get("/", listProducts);
  *    200:
  *     description: Product data
  */
+
+/*
+  * @swagger
+  * /api/products/featured:
+  * get:
+  * summary: Get featured products
+  * tags: [Products]
+  * responses:
+  * 200:
+  *  description: List of featured products
+*/
+router.get("/featured", listFeaturedProducts);
 router.get("/:id", getProduct);
 /**
  * @swagger

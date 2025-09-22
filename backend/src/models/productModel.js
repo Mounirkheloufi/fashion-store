@@ -5,6 +5,11 @@ async function getAllProducts() {
     return rows;
 }
 
+async function getFeaturedProducts() {
+    const [rows] = await pool.query("SELECT * FROM products ORDER BY created_at DESC LIMIT 15");
+    return rows;
+}
+
 async function getProductById(id) {
     const [rows] = await pool.query("SELECT * FROM products WHERE id = ?", [id]);
     return rows[0];
@@ -34,5 +39,6 @@ module.exports = {
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getFeaturedProducts
 };

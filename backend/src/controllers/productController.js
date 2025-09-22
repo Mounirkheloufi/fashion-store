@@ -21,6 +21,15 @@ async function getProduct(req, res, next) {
     }
 }
 
+async function listFeaturedProducts(req, res, next) {
+    try {
+        const products = await Product.getFeaturedProducts();
+        res.json(products);
+    } catch (error) {
+        next(error);
+    }
+}
+
 async function createProduct(req, res, next) {
     try {
         const { name, description, price, image, stock, category, score } = req.body;
@@ -55,5 +64,6 @@ module.exports = {
     getProduct,
     createProduct,
     updateProduct,
-    removeProduct
+    removeProduct,
+    listFeaturedProducts
 };
