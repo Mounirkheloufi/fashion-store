@@ -50,6 +50,28 @@ router.get("/:id", getProduct);
  *  post:
  *   summary: Create a new product
  *   tags: [Products]
+ *   requestBody:
+ *    required: true
+ *   content:
+ *    application/json:
+ *     schema:
+ *      type: object
+ *      properties:
+ *       name:
+ *        type: string
+ *       description:
+ *        type: string
+ *       price:
+ *        type: number
+ *       image: 
+ *        type: string
+ *       stock:
+ *        type: integer
+ *       category:
+ *        type: string
+ *       score:
+ *        type: number
+ *        example: 4.5 
  *   responses:
  *    201:
  *     description: Product created successfully

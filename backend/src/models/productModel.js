@@ -12,16 +12,16 @@ async function getProductById(id) {
 
 async function createProduct({ name, description, price, image, stock= 0, category= null }) {
     const [result] = await pool.query(
-        "INSERT INTO products (name, description, price, image, stock, category) VALUES (?, ?, ?, ?, ?, ?)",
-        [name, description, price, image, stock, category]
+        "INSERT INTO products (name, description, price, image, stock, category, score) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [name, description, price, image, stock, category, score]
     );
     return { id: result.insertId };
 }
 
-async function updateProduct(id, { name, description, price, image, stock, category }) {
+async function updateProduct(id, { name, description, price, image, stock, category, score }) {
     const [result] = await pool.query(
-        "UPDATE products SET name = ?, description = ?, price = ?, image = ?, stock = ?, category = ? WHERE id = ?",
-        [name, description, price, image, stock, category, id]
+        "UPDATE products SET name = ?, description = ?, price = ?, image = ?, stock = ?, category = ?, score= ? WHERE id = ?",
+        [name, description, price, image, stock, category, score, id]
     );
 }
 
