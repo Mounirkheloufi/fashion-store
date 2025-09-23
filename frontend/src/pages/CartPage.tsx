@@ -47,6 +47,8 @@ export default function CartPage() {
   const shippingCost = total > 50 ? 0 : 5;
   const finalTotal = total + shippingCost;
 
+  const API_URL = "http://localhost:5000"; 
+
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
@@ -135,7 +137,7 @@ export default function CartPage() {
                   <div className="flex-shrink-0">
                     <div className="w-24 h-24 bg-gray-100 rounded-xl overflow-hidden">
                       <img
-                        src={item.image}
+                        src={`${API_URL}/images/${item.image}`}
                         alt={item.name}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       />
