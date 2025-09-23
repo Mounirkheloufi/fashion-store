@@ -189,17 +189,44 @@ export default function Home() {
                             Découvrez notre sélection de vêtements et accessoires de mode pour un style unique et moderne.
                         </p>
                     </div>
-                    {/* Filtres de catégories */}
-                    <div className="flex flex-wrap justify-center gap-3 mb-8">
-                        {categories.map(c => (
-                            <Button
-                                key={c}
-                                type={filter === c ? "primary" : "default"}
-                                onClick={() => setFilter(c)}
+
+                    {/* Filtres de catégories - Scrollable sur mobile */}
+                    <div className="mb-8">
+                        {/* Version desktop */}
+                        <div className="hidden sm:flex flex-wrap justify-center gap-3">
+                            {categories.map(c => (
+                                <button
+                                    key={c}
+                                    onClick={() => setFilter(c)}
+                                    className={`category-filter-btn ${
+                                        filter === c 
+                                            ? 'category-active' 
+                                            : 'category-inactive'
+                                    }`}
                                 >
                                     {c.toUpperCase()}
-                                </Button>
-                        ))}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Version mobile avec scroll horizontal */}
+                        <div className="sm:hidden">
+                            <div className="flex gap-3 overflow-x-auto pb-2 px-1 category-scroll">
+                                {categories.map(c => (
+                                    <button
+                                        key={c}
+                                        onClick={() => setFilter(c)}
+                                        className={`category-filter-btn-mobile ${
+                                            filter === c 
+                                                ? 'category-active-mobile' 
+                                                : 'category-inactive-mobile'
+                                        }`}
+                                    >
+                                        {c.toUpperCase()}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                     
                     <ProductGrid products={filtredProducts} />
@@ -261,7 +288,117 @@ export default function Home() {
                     transform: scale(1.3);
                     border-color: white;
                 }
-                
+
+                /* Styles pour les boutons de catégories - Desktop */
+                .category-filter-btn {
+                    padding: 10px 20px;
+                    border-radius: 25px;
+                    font-weight: 600;
+                    font-size: 14px;
+                    letter-spacing: 0.5px;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    border: 2px solid transparent;
+                    cursor: pointer;
+                    position: relative;
+                    overflow: hidden;
+                    min-width: 100px;
+                    text-align: center;
+                }
+
+                .category-active {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+                    border-color: #667eea;
+                    transform: translateY(-2px);
+                }
+
+                .category-inactive {
+                    background: white;
+                    color: #4a5568;
+                    border-color: #e2e8f0;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                .category-inactive:hover {
+                    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+                    border-color: #cbd5e0;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+                }
+
+                /* Styles pour les boutons de catégories - Mobile */
+                .category-filter-btn-mobile {
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    font-weight: 600;
+                    font-size: 13px;
+                    letter-spacing: 0.3px;
+                    transition: all 0.3s ease;
+                    border: 2px solid transparent;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    flex-shrink: 0;
+                    min-width: 80px;
+                    text-align: center;
+                    position: relative;
+                    -webkit-tap-highlight-color: transparent;
+                }
+
+                .category-active-mobile {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                    border-color: #667eea;
+                    transform: scale(1.05);
+                }
+
+                .category-inactive-mobile {
+                    background: white;
+                    color: #4a5568;
+                    border-color: #e2e8f0;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                /* Effet tactile pour mobile */
+                .category-inactive-mobile:active {
+                    background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+                    transform: scale(0.98);
+                    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+                }
+
+                /* Scroll horizontal pour mobile */
+                .category-scroll {
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                    scroll-behavior: smooth;
+                }
+
+                .category-scroll::-webkit-scrollbar {
+                    display: none;
+                }
+
+                /* Animation de scroll */
+                .category-scroll {
+                    scroll-snap-type: x mandatory;
+                }
+
+                .category-filter-btn-mobile {
+                    scroll-snap-align: center;
+                }
+
+                /* Indicateur de scroll pour mobile */
+                .category-scroll::after {
+                    content: '';
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    width: 20px;
+                    background: linear-gradient(to left, rgba(248, 250, 252, 1), transparent);
+                    pointer-events: none;
+                }
+
                 @keyframes fade-in-up {
                     from {
                         opacity: 0;
@@ -297,6 +434,44 @@ export default function Home() {
                 .home-banner-carousel .slick-track {
                     touch-action: pan-y;
                     pointer-events: auto;
+                }
+
+                /* Amélioration des interactions tactiles */
+                @media (max-width: 768px) {
+                    .category-filter-btn-mobile:active {
+                        transform: scale(0.95);
+                    }
+                    
+                    /* Style pour les cartes en version mobile - 2 par ligne */
+                    .product-grid {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 12px;
+                    }
+                    
+                    .product-card {
+                        transition: transform 0.2s ease;
+                    }
+                    
+                    .product-card:active {
+                        transform: scale(0.98);
+                    }
+                }
+
+                /* Styles pour tablettes */
+                @media (min-width: 768px) and (max-width: 1024px) {
+                    .product-grid {
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 16px;
+                    }
+                }
+
+                /* Styles pour desktop */
+                @media (min-width: 1024px) {
+                    .product-grid {
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 20px;
+                    }
                 }
             `}</style>
         </div>
