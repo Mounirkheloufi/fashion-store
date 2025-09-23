@@ -6,7 +6,7 @@ async function getAllProducts() {
 }
 
 async function getFeaturedProducts() {
-    const [rows] = await pool.query("SELECT * FROM products ORDER BY created_at DESC LIMIT 15");
+    const [rows] = await pool.query("SELECT * FROM products ORDER BY created_at DESC LIMIT 12");
     return rows;
 }
 
