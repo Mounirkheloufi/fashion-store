@@ -8,7 +8,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
     <>
       <Row gutter={[12, 16]} className="product-grid-row">
         {products.map((p) => (
-          <Col key={p.id} xs={12} sm={12} md={8} lg={6} xl={4} className="product-col">
+          <Col key={p.id} xs={12} sm={12} md={8} lg={6} xl={6} className="product-col">
             <ProductCard {...p} />
           </Col>
         ))}
