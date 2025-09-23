@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const swaggerDocs = require("./config/swagger");
+const path = require("path");
 require("dotenv").config({ path: "../.env" });
 
 const productRoutes = require("./routes/productRoutes");
@@ -20,6 +21,9 @@ app.use(express.json());
 
 // generate pdf facture
 app.use('/invoices', express.static('invoices'));
+
+// rendre le dossier public accessible
+app.use("/images", express.static(path.join(__dirname, "./images")));
 
 // Test route
 app.get("/", (req, res) => {
