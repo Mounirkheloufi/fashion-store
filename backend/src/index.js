@@ -25,6 +25,8 @@ app.use('/invoices', express.static('invoices'));
 // rendre le dossier public accessible
 app.use("/images", express.static(path.join(__dirname, "./images")));
 
+app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
+
 // Test route
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");

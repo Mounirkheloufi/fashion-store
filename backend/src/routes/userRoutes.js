@@ -1,6 +1,7 @@
 const express = require("express");
 const { register, login, getProfile, getUsers } = require("../controllers/userController");
 const authMiddleware = require("../middelwares/authMiddleware");
+const upload = require("../middelwares/upload")
 
 const router = express.Router();
 
@@ -45,7 +46,7 @@ const router = express.Router();
  *       400:
  *         description: Bad request
  */
-router.post("/register", register);
+router.post("/register", upload.single("profile_picture"), register);
 
 /**
  * @swagger

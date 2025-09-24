@@ -2,18 +2,21 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const { signToken } = require("../utils/tokenUtils");
+const upload = require("../middelwares/upload")
 
 
 async function register(req, res, next) {
     try {
-        const { name, email, password, profile_picture } = req.body;
+        const { name, email, password } = req.body;
         const existing = await User.findUserByEmail(email);
         if (existing) return res.status(400).json({ error: "Email already in use" });
 
         const hash = await bcrypt.hash(password, 10);
+        // Gérer l'image si envoyée
+        const profile_picture = req.file ? req.file.filename : null;
         const { id } = await User.createUser({ name, email, passwordHach: hash, profile_picture });
         const token = signToken({ id, email });
-        res.status(201).json({ id, name, email, profile_picture, token });
+        res.status(201).json({ id, name, email, profile_picture: profile_picture ? `/uploads/${profile_picture}` : null, token });
     } catch (error) {
         next(error);
     }
