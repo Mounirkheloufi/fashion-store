@@ -37,15 +37,17 @@ export const login = createAsyncThunk(
 );
 
 export const register = createAsyncThunk(
-    "user/register",
-    async (payload: { name: string; email: string; password: string }, { rejectWithValue }) => {
-        try {
-            const res = await API.post("/users/register", payload);
-            return res.data;
-        } catch (err: any) {
-            return rejectWithValue(err.response?.data?.message || "Registration failed");
-        }
+  "user/register",
+  async (formData: FormData, { rejectWithValue }) => {
+    try {
+      const res = await API.post("/users/register", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return res.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || "Registration failed");
     }
+  }
 );
 
 const slice = createSlice({
