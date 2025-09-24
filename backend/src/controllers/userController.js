@@ -14,7 +14,7 @@ async function register(req, res, next) {
         const hash = await bcrypt.hash(password, 10);
         // Gérer l'image si envoyée
         const profile_picture = req.file ? req.file.filename : null;
-        const { id } = await User.createUser({ name, email, passwordHach: hash, profile_picture });
+        const { id } = await User.createUser({ name, email, password: hash, profile_picture });
         const token = signToken({ id, email });
         res.status(201).json({ id, name, email, profile_picture: profile_picture ? `/uploads/${profile_picture}` : null, token });
     } catch (error) {

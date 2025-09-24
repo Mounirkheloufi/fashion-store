@@ -5,10 +5,10 @@ async function getAllUsers() {
     return rows;
 }
 
-async function createUser({ name, email, passwordHach, role = 'user', profile_picture = null }) {
+async function createUser({ name, email, password, role = 'user', profile_picture = null }) {
     const [result] = await pool.query(
         "INSERT INTO users (name, email, password, role, profile_picture) VALUES (?, ?, ?, ?, ?)",
-        [name, email, passwordHach, role, profile_picture]
+        [name, email, password, role, profile_picture]
     );
     return { id: result.insertId };
 }
