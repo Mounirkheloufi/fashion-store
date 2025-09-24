@@ -146,15 +146,15 @@ export default function Shop() {
   };
 
   const FilterSidebar = () => (
-    <div className="filter-sidebar">
-      <div className="filter-header">
-        <Title level={4}>Filtres</Title>
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 sticky top-6">
+      <div className="flex justify-between items-center mb-4">
+        <Title level={4} className="!m-0">Filtres</Title>
         {activeFiltersCount > 0 && (
           <Button 
             type="link" 
             size="small" 
             onClick={clearAllFilters}
-            className="clear-filters-btn"
+            className="!p-0 !text-xs text-blue-500"
           >
             Effacer tout ({activeFiltersCount})
           </Button>
@@ -162,26 +162,29 @@ export default function Shop() {
       </div>
 
       {/* Recherche */}
-      <div className="filter-section">
-        <Text strong>Rechercher</Text>
+      <div className="mb-4">
+        <Text strong className="block mb-3 text-gray-800">Rechercher</Text>
         <Search
           placeholder="Nom du produit..."
           value={filters.search}
           onChange={(e) => updateFilter('search', e.target.value)}
-          style={{ marginTop: 8 }}
         />
       </div>
 
       <Divider />
 
       {/* Catégories */}
-      <div className="filter-section">
-        <Text strong>Catégories</Text>
-        <div className="category-list">
+      <div className="mb-4">
+        <Text strong className="block mb-3 text-gray-800">Catégories</Text>
+        <div className="space-y-2">
           {categories.map(cat => (
             <div 
               key={cat.key}
-              className={`category-item ${filters.category === cat.key ? 'active' : ''}`}
+              className={`flex justify-between items-center p-3 rounded-lg cursor-pointer transition-all duration-200 border border-transparent hover:bg-blue-50 hover:border-blue-200 ${
+                filters.category === cat.key 
+                  ? 'bg-blue-50 border-blue-500 text-blue-600 font-medium' 
+                  : ''
+              }`}
               onClick={() => updateFilter('category', cat.key)}
             >
               <span>{cat.label}</span>
@@ -194,8 +197,8 @@ export default function Shop() {
       <Divider />
 
       {/* Prix */}
-      <div className="filter-section">
-        <Text strong>Prix (DA)</Text>
+      <div className="mb-4">
+        <Text strong className="block mb-3 text-gray-800">Prix (DA)</Text>
         <Slider
           range
           min={0}
@@ -205,7 +208,7 @@ export default function Shop() {
           onChange={(value) => updateFilter('priceRange', value)}
           style={{ margin: '16px 0' }}
         />
-        <div className="price-display">
+        <div className="flex justify-between text-xs text-gray-600">
           <span>{filters.priceRange[0]} DA</span>
           <span>{filters.priceRange[1]} DA</span>
         </div>
@@ -214,8 +217,8 @@ export default function Shop() {
       <Divider />
 
       {/* Note minimale */}
-      <div className="filter-section">
-        <Text strong>Note minimale</Text>
+      <div className="mb-4">
+        <Text strong className="block mb-3 text-gray-800">Note minimale</Text>
         <Rate
           value={filters.rating}
           onChange={(value) => updateFilter('rating', value)}
@@ -226,7 +229,7 @@ export default function Shop() {
       <Divider />
 
       {/* En stock */}
-      <div className="filter-section">
+      <div className="mb-4">
         <Checkbox
           checked={filters.inStock}
           onChange={(e) => updateFilter('inStock', e.target.checked)}
@@ -238,22 +241,22 @@ export default function Shop() {
   );
 
   return (
-    <div className="shop-page">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="shop-header">
+      <div className="bg-white border-b border-gray-200 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="shop-header-content">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center flex-wrap gap-4 sm:gap-3">
             <div>
-              <Title level={2} style={{ margin: 0 }}>Boutique</Title>
+              <Title level={2} className="!m-0">Boutique</Title>
               <Text type="secondary">
                 {filteredProducts.length} produit{filteredProducts.length > 1 ? 's' : ''} trouvé{filteredProducts.length > 1 ? 's' : ''}
               </Text>
             </div>
             
-            <div className="shop-controls">
+            <div className="flex flex-row justify-between sm:justify-start items-center gap-4 w-full sm:w-auto">
               {/* Bouton filtres mobile */}
               <Button 
-                className="mobile-filter-btn lg:hidden"
+                className="flex lg:hidden items-center gap-2"
                 icon={<FilterOutlined />}
                 onClick={() => setMobileFiltersVisible(true)}
               >
@@ -264,7 +267,7 @@ export default function Shop() {
               </Button>
 
               {/* Mode d'affichage */}
-              <div className="view-mode-toggle hidden sm:flex">
+              <div className="hidden sm:flex">
                 <Button.Group>
                   <Button
                     type={viewMode === 'grid' ? 'primary' : 'default'}
@@ -297,9 +300,9 @@ export default function Shop() {
         </div>
       </div>
 
-      <div className="shop-content">
+      <div className="py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="shop-layout">
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
             {/* Sidebar Desktop */}
             <div className="hidden lg:block lg:w-1/4 xl:w-1/5">
               <FilterSidebar />
@@ -340,212 +343,6 @@ export default function Shop() {
       >
         <FilterSidebar />
       </Drawer>
-
-      {/* Styles */}
-      <style>{`
-        .shop-page {
-          min-height: 100vh;
-          background-color: #f8f9fa;
-        }
-
-        .shop-header {
-          background: white;
-          border-bottom: 1px solid #e8e9ea;
-          padding: 24px 0;
-        }
-
-        .shop-header-content {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 16px;
-        }
-
-        .shop-controls {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-        }
-
-        .mobile-filter-btn {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .shop-content {
-          padding: 24px 0;
-        }
-
-        .shop-layout {
-          display: flex;
-          gap: 32px;
-          align-items: flex-start;
-        }
-
-        /* Sidebar Styles */
-        .filter-sidebar {
-          background: white;
-          border-radius: 12px;
-          padding: 24px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-          border: 1px solid #f0f0f0;
-          position: sticky;
-          top: 24px;
-        }
-
-        .filter-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 16px;
-        }
-
-        .clear-filters-btn {
-          padding: 0 !important;
-          font-size: 12px;
-          color: #1890ff;
-        }
-
-        .filter-section {
-          margin-bottom: 16px;
-        }
-
-        .filter-section .ant-typography {
-          display: block;
-          margin-bottom: 12px;
-          color: #262626;
-        }
-
-        /* Categories */
-        .category-list {
-          space-y: 8px;
-        }
-
-        .category-item {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 8px 12px;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          border: 1px solid transparent;
-        }
-
-        .category-item:hover {
-          background-color: #f0f2ff;
-          border-color: #d6e4ff;
-        }
-
-        .category-item.active {
-          background-color: #e6f7ff;
-          border-color: #1890ff;
-          color: #1890ff;
-          font-weight: 500;
-        }
-
-        /* Checkboxes */
-        .checkbox-list,
-        .color-grid {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-
-        .checkbox-item {
-          display: flex;
-          align-items: center;
-        }
-
-        .size-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 8px;
-        }
-
-        .size-checkbox {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 8px;
-          border: 1px solid #d9d9d9;
-          border-radius: 6px;
-          transition: all 0.2s ease;
-        }
-
-        .size-checkbox:hover {
-          border-color: #1890ff;
-          background-color: #f0f2ff;
-        }
-
-        .size-checkbox.ant-checkbox-wrapper-checked {
-          border-color: #1890ff;
-          background-color: #e6f7ff;
-        }
-
-        /* Colors */
-        .color-item {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .color-circle {
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          border: 1px solid #d9d9d9;
-        }
-
-        /* Price Display */
-        .price-display {
-          display: flex;
-          justify-content: space-between;
-          font-size: 12px;
-          color: #666;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 1024px) {
-          .shop-layout {
-            flex-direction: column;
-          }
-          
-          .filter-sidebar {
-            position: static;
-          }
-        }
-
-        @media (max-width: 640px) {
-          .shop-header {
-            padding: 16px 0;
-          }
-          
-          .shop-header-content {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 12px;
-          }
-          
-          .shop-controls {
-            justify-content: space-between;
-          }
-        }
-
-        /* View Mode */
-        .view-mode-toggle .ant-btn-group {
-          display: flex;
-        }
-
-        /* Animations */
-        .filter-sidebar,
-        .category-item,
-        .size-checkbox {
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-      `}</style>
     </div>
   );
 }
