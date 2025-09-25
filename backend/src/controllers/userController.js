@@ -6,20 +6,48 @@ const upload = require("../middelwares/upload")
 
 
 async function register(req, res, next) {
-    try {
-        const { name, email, password } = req.body;
-        const existing = await User.findUserByEmail(email);
-        if (existing) return res.status(400).json({ error: "Email already in use" });
+  try {
+    console.log("BODY ===>", req.body);
+    console.log("FILE ===>", req.file);
+    const { name, email, password, role } = req.body;
 
-        const hash = await bcrypt.hash(password, 10);
-        // Gérer l'image si envoyée
-        const profile_picture = req.file ? req.file.filename : null;
-        const { id } = await User.createUser({ name, email, password: hash, profile_picture });
-        const token = signToken({ id, email });
-        res.status(201).json({ id, name, email, profile_picture: profile_picture ? `/uploads/${profile_picture}` : null, token });
-    } catch (error) {
-        next(error);
+    // Vérifier si fichier envoyé
+    let profile_picture = null;
+    if (req.file) {
+      profile_picture = `/uploads/${req.file.filename}`; 
     }
+
+    // Vérifier si email existe déjà
+    const existing = await User.findUserByEmail(email);
+    if (existing) {
+      return res.status(400).json({ error: "Email already in use" });
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+
+    // Créer utilisateur
+    const { id } = await User.createUser({
+      name,
+      email,
+      password: hash, 
+      role: role || "user",
+      profile_picture,
+    });
+
+    const token = signToken({ id, email });
+
+    res.status(201).json({
+      id,
+      name,
+      email,
+      role: role || "user",
+      profile_picture,
+      token,
+    });
+  } catch (error) {
+    console.error(error); 
+    next(error);
+  }
 }
 
 async function login(req, res, next) {

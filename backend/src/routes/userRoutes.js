@@ -21,7 +21,7 @@ const router = express.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -36,6 +36,9 @@ const router = express.Router();
  *               role:
  *                 type: string
  *                 enum: [user, admin]
+ *               profile_picture:
+ *                 type: string
+ *                 format: binary          
  *             required:
  *               - name
  *               - email

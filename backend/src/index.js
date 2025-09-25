@@ -25,7 +25,7 @@ app.use('/invoices', express.static('invoices'));
 // rendre le dossier public accessible
 app.use("/images", express.static(path.join(__dirname, "./images")));
 
-app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Test route
 app.get("/", (req, res) => {
@@ -39,12 +39,12 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
 
 // Appliquer auth uniquement si ce n’est pas swagger
-app.use((req, res, next) => {
-  if (req.path.startsWith("/api-docs")) {
-    return next(); 
-  }
-  return authMiddleware(req, res, next);
-});
+// app.use((req, res, next) => {
+//   if (req.path.startsWith("/api-docs")) {
+//     return next(); 
+//   }
+//   return authMiddleware(req, res, next);
+// });
 
 // Error handler
 app.use(errorMiddleware);
