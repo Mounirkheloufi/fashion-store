@@ -61,7 +61,7 @@ async function login(req, res, next) {
         if (!ok) return res.status(401).json({ error: "Invalid email or password" });
 
         const token = signToken({ id: user.id, email: user.email });
-        res.json({ id: user.id, name: user.name, email: user.email, token });
+        res.json({ id: user.id, name: user.name, email: user.email, role: user.role, profile_picture: user.profile_picture, token });
     } catch (error) {
         next(error);
     }
