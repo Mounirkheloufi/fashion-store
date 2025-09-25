@@ -71,7 +71,7 @@ const slice = createSlice({
                     name: action.payload.name,
                     email: action.payload.email,
                     role: action.payload.role,
-                    profile_picture: action.payload.profile_picture
+                    profile_picture: action.payload.profile_picture,
                 };
                 state.loading = false;
                 state.error = null;
@@ -91,8 +91,19 @@ const slice = createSlice({
             })
             // register success
             .addCase(register.fulfilled, (state, action) => {
-                state.loading = false;
-                state.error = null;
+            //   state.token = action.payload.token;
+            //   state.user = {
+            //     id: action.payload.id,
+            //     name: action.payload.name,
+            //     email: action.payload.email,
+            //     role: action.payload.role,
+            //     profile_picture: action.payload.profile_picture,
+            //   };
+              state.loading = false;
+              state.error = null;
+
+             // localStorage.setItem("token", action.payload.token);
+             // localStorage.setItem("user", JSON.stringify(state.user));
             })
             // register pending
             .addCase(register.pending, (state) => {

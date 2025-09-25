@@ -9,7 +9,7 @@ export default function Register() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [file, setFile] = useState<File | null>(null)
-
+  const [form] = Form.useForm()
   const onFinish = async (values: any) => {
     try {
       const formData = new FormData()
@@ -21,9 +21,12 @@ export default function Register() {
         formData.append('profile_picture', file)
       }
 
+      //console.log("Sending data:", Array.from(formData.entries()));
+
       await dispatch(register(formData) as any)
       message.success("✅ Account created successfully!")
       setFile(null) // reset file
+      form.resetFields()
       navigate('/login')
     } catch (e) {
       console.error(e)

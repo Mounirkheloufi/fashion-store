@@ -46,8 +46,16 @@ const Navbar: React.FC = () => {
         {
             key: 'profile',
             label: (
-                <div className="flex items-center gap-2">
-                    <UserOutlined />
+          <div className="flex items-center gap-2">
+            {user?.profile_picture ? (
+              <img
+                src={`http://localhost:5000${user.profile_picture}`}
+                alt="profile"
+                className="w-6 h-6 rounded-full object-cover"
+              />
+            ) : (
+              <UserOutlined />
+            )}
                     Mon Profil
                 </div>
             ),
@@ -151,11 +159,11 @@ const Navbar: React.FC = () => {
                                             trigger={['click']}
                                         >
                                             <div className="flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 border border-gray-200 hover:bg-slate-50 hover:-translate-y-px">
-                                                <Avatar 
-                                                    src={user.profile_picture} 
-                                                    icon={!user.profile_picture ? <UserOutlined /> : undefined}
-                                                    className="w-10 h-10 border-2 border-indigo-500"
-                                                />
+                                                <Avatar
+                                                 src={user?.profile_picture ? `http://localhost:5000${user.profile_picture}` : undefined}
+                                                 icon={!user?.profile_picture ? <UserOutlined /> : undefined}
+                                                 className="w-10 h-10 border-2 border-indigo-500"
+                                               />
                                                 <div className="flex flex-col items-start">
                                                     <span className="font-semibold text-gray-800 text-sm leading-tight">{user.name}</span>
                                                     <span className="text-xs text-green-500 font-medium">En ligne</span>
@@ -204,11 +212,11 @@ const Navbar: React.FC = () => {
                         <div className="pt-3 border-t border-gray-100">
                             {isAuthenticated && user ? (
                                 <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
-                                    <Avatar 
-                                        src={user.profile_picture} 
-                                        icon={!user.profile_picture ? <UserOutlined /> : undefined}
-                                        className="w-12 h-12 border-2 border-indigo-500 flex-shrink-0"
-                                    />
+                                    <Avatar
+                                     src={user?.profile_picture ? `http://localhost:5000${user.profile_picture}` : undefined}
+                                     icon={!user?.profile_picture ? <UserOutlined /> : undefined}
+                                     className="w-12 h-12 border-2 border-indigo-500 flex-shrink-0"
+                                   />                                               
                                     <div className="flex-1 min-w-0">
                                         <div className="font-semibold text-gray-800 text-[15px] mb-0.5">{user.name}</div>
                                         <div className="text-xs text-gray-500 mb-1.5 break-all">{user.email}</div>
