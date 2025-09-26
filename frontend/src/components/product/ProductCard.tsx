@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/cartSlice";
 import type { AppDispatch } from "../../store";
 import { ShoppingCartOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   id: number;
@@ -17,6 +18,7 @@ type Props = {
 
 const ProductCard: React.FC<Props> = ({ id, name, description, price, image, stock, score }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
@@ -25,11 +27,16 @@ const ProductCard: React.FC<Props> = ({ id, name, description, price, image, sto
     setAdded(true);
     setTimeout(() => setAdded(false), 2000); // Reset after 2 seconds
   };
+  
+  const handleCardClick = () => {
+    navigate(`/product/${id}`)
+  }
 
   return (
     <>
       <Card
         hoverable
+        onClick={handleCardClick}
         className="mobile-product-card"
         cover={
           <div className="mobile-card-image-container">
