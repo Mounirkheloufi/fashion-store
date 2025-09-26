@@ -18,7 +18,8 @@ const options = {
             { name: "Users", description: "User management and authentication" },
             { name: "Products", description: "Product management" },
             { name: "Cart", description: "Shopping cart management" },
-            { name: "Orders", description: "Order management" }
+            { name: "Orders", description: "Order management" },
+            { name: "Stats", description: "Statistiques" }
         ],
         components: {
             securitySchemes: {
