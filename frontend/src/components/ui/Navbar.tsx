@@ -61,6 +61,18 @@ const Navbar: React.FC = () => {
             ),
             onClick: () => navigate('/profile')
         },
+        ...(user?.role === "admin"
+    ? [{
+        key: 'admin',
+        label: (
+          <div className="flex items-center gap-2 text-blue-500 font-medium">
+            <UserOutlined />
+            Espace Admin
+          </div>
+        ),
+        onClick: () => navigate('/admin')
+      }]
+    : []),
         {
             type: 'divider' as const
         },
