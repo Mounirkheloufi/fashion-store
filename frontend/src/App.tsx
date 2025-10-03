@@ -11,6 +11,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Blogs from './pages/Blogs'
 import AdminDashboard from './pages/admin/AdminDashboard'
+import UserManager from './pages/admin/UserManager'
 import Profile from './pages/ProfilePage'
 
 
@@ -33,6 +34,7 @@ return (
 <Route path="/blogs" element={<Blogs />} />
 <Route path="/profile" element={<Profile />} />
 <Route path="/admin" element={<AdminDashboard />} />
+<Route path="/admin/users" element={<UserManager />} />
 </Routes>
 </Content>
 <AppFooter />
