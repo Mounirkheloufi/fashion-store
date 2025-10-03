@@ -10,7 +10,7 @@ import CartPage from './pages/CartPage'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Blogs from './pages/Blogs'
-import AdminDashboard from './pages/AdminDashboard'
+import AdminDashboard from './pages/admin/AdminDashboard'
 import Profile from './pages/ProfilePage'
 
 
