@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAdminStats } = require("../controllers/adminController");
+const { getAdminStats, banUser } = require("../controllers/adminController");
 const  authMiddleware = require("../middelwares/authMiddleware");
 const  isAdmin = require("../middelwares/isAdmin");
 
@@ -47,5 +47,7 @@ const router = express.Router();
  *         description: Accès interdit (admin uniquement)
  */
 router.get("/stats", authMiddleware, isAdmin, getAdminStats);
+
+router.put("/users/:id/ban", authMiddleware, isAdmin, banUser);
 
 module.exports = router;

@@ -1,7 +1,8 @@
 const express = require("express");
-const { register, login, getProfile, getUsers } = require("../controllers/userController");
+const { register, login, getProfile, getUsers, updateProfile, deleteProfile } = require("../controllers/userController");
 const authMiddleware = require("../middelwares/authMiddleware");
-const upload = require("../middelwares/upload")
+const upload = require("../middelwares/upload");
+const isAdmin = require("../middelwares/isAdmin");
 
 const router = express.Router();
 
@@ -111,6 +112,8 @@ router.get("/profile", authMiddleware, getProfile);
  *       403:
  *         description: Forbidden - Admin access only
  */
-router.get("/", getUsers);
+router.get("/",authMiddleware, isAdmin, getUsers);
+router.put("/:id",authMiddleware, updateProfile);
+router.delete("/:id",authMiddleware, deleteProfile);
 
 module.exports = router;
