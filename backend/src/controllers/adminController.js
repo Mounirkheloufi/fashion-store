@@ -46,4 +46,32 @@ const getAdminStats = async (req, res) => {
     }
 };
 
-module.exports = { getAdminStats };
+const banUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Vérifier si l'utilisateur existe
+    const [user] = await db.query("SELECT * FROM users WHERE id = ?", [id]);
+    if (!user.length) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Toggle entre actif et inactif
+    const newStatus = user[0].is_active ? 0 : 1;
+    await db.query("UPDATE users SET is_active = ? WHERE id = ?", [newStatus, id]);
+
+    res.json({
+      message: newStatus ? "User activated successfully" : "User deactivated (banned) successfully",
+      userId: id,
+      is_active: newStatus
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur", error });
+  }
+};
+
+module.exports = { 
+    getAdminStats,
+    banUser
+ };

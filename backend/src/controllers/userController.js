@@ -54,8 +54,13 @@ async function login(req, res, next) {
     try {
         const { email, password } = req.body;
         const user = await User.findUserByEmail(email);
-        console.log("🔍 User fetched from DB:", user); 
+        console.log(" User fetched from DB:", user); 
         if (!user) return res.status(401).json({ error: "Invalid email or password" });
+
+        // Vérifier si compte désactivé
+        if (user.is_active === 0) {
+            return res.status(403).json({ error: "Account disabled. Contact admin." });
+        }
 
         const ok = await bcrypt.compare(password, user.password);
         if (!ok) return res.status(401).json({ error: "Invalid email or password" });
@@ -96,9 +101,49 @@ async function getUsers(req, res, next) {
     }
 }
 
+async function updateProfile(req, res, next) {
+  try {
+    const userId = req.user.id; // récupéré via authMiddleware
+    const { email, password } = req.body;
+
+    let profile_picture = req.user.profile_picture;
+    if (req.file) {
+      profile_picture = `/uploads/${req.file.filename}`;
+    }
+
+    // Si changement de mot de passe
+    let hashedPassword = req.user.password;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    await User.updateUserProfile(userId, { email, password: hashedPassword, profile_picture });
+
+    res.json({ message: "Profile updated successfully" });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+async function deleteProfile(req, res, next) {
+  try {
+    const userId = req.user.id;
+    const deleted = await User.deleteUser(userId);
+
+    if (!deleted) return res.status(404).json({ error: "User not found" });
+
+    res.json({ message: "Profile deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
     getUsers,
     register,
     login,
-    getProfile
+    getProfile,
+    updateProfile,
+    deleteProfile
 };  
