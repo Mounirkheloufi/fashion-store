@@ -129,34 +129,38 @@ const UserManager: React.FC = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Sidebar */}
+    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+    {/* Sidebar fixe */}
+    <div className="w-64 fixed left-0 top-0 h-full bg-white shadow-lg z-20">
       <AdminSidebar />
+    </div>
 
-      {/* Main Content */}
-      <div className="flex-1 p-4 sm:p-6 lg:p-8">
-        <div className="max-w-7xl mx-auto space-y-6">
-          {/* Header */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center">
-                    <UserOutlined className="text-white text-xl" />
-                  </div>
-                  Gestion des Utilisateurs
-                </h1>
-                <p className="text-gray-600 mt-2">Gérez les utilisateurs et leurs permissions</p>
-              </div>
-              <Badge count={filteredUsers.length} showZero className="!bg-blue-600">
-                <div className="bg-blue-50 px-4 py-2 rounded-lg">
-                  <span className="text-sm font-semibold text-blue-600">
-                    Total: {filteredUsers.length}
-                  </span>
+    {/* Contenu principal scrollable */}
+    <div className="flex-1 ml-64 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto space-y-6 pb-10">
+        {/* Header */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center">
+                  <UserOutlined className="text-white text-xl" />
                 </div>
-              </Badge>
+                Gestion des Utilisateurs
+              </h1>
+              <p className="text-gray-600 mt-2">
+                Gérez les utilisateurs et leurs permissions
+              </p>
             </div>
+            <Badge count={filteredUsers.length} showZero className="!bg-blue-600">
+              <div className="bg-blue-50 px-4 py-2 rounded-lg">
+                <span className="text-sm font-semibold text-blue-600">
+                  Total: {filteredUsers.length}
+                </span>
+              </div>
+            </Badge>
           </div>
+        </div>
 
           {/* Statistiques */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
