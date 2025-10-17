@@ -240,10 +240,10 @@ export default function Shop() {
     </div>
   );
 
-  return (
-    <div className="min-h-screen bg-gray-50">
+  return (  
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 py-6">
+      <div className="bg-white border-b border-gray-200 py-6 flex-shrink-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center flex-wrap gap-4 sm:gap-3">
             <div>
@@ -309,9 +309,10 @@ export default function Shop() {
             </div>
 
             {/* Contenu principal */}
-            <div className="flex-1 lg:ml-8">
-              <ProductGrid products={filteredProducts}/>
-            </div>
+            <div className="flex-1 lg:ml-8 h-[calc(180vh-100px)] overflow-y-auto pr-2">
+  <ProductGrid products={filteredProducts} />
+</div>
+
           </div>
         </div>
       </div>
