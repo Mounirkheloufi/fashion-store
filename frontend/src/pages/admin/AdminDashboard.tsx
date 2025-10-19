@@ -21,12 +21,14 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-gray-50">
       {/* Sidebar */}
-      <AdminSidebar />
+      <div className="w-64 fixed left-0 top-0 h-full bg-white shadow-lg z-20">
+        <AdminSidebar />
+      </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 space-y-6">
+      <div className="flex-1 ml-64 overflow-y-auto p-6 space-y-6">
         <h2 className="text-2xl font-bold text-gray-800">📊 Admin Dashboard</h2>
 
         {/* Cards Section */}
