@@ -13,6 +13,7 @@ import Blogs from './pages/Blogs'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import UserManager from './pages/admin/UserManager'
 import Profile from './pages/ProfilePage'
+import ProductManager from './pages/admin/ProductManager'
 
 const { Content } = Layout
 
@@ -40,6 +41,7 @@ export default function App() {
           {/* Routes admin */}
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<UserManager />} />
+          <Route path="/admin/products" element={<ProductManager />} />
         </Routes>
       </Content>
 
