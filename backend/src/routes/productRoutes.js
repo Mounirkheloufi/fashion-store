@@ -7,6 +7,8 @@ const {
   updateProduct,
   removeProduct,
 } = require("../controllers/productController");
+const isAdmin = require("../middelwares/isAdmin");
+const authMiddleware = require("../middelwares/authMiddleware");
 
 const router = express.Router();
 
@@ -89,7 +91,7 @@ router.get("/:id", getProduct);
  *    201:
  *     description: Product created successfully
  */
-router.post("/", createProduct);
+router.post("/", authMiddleware, isAdmin, createProduct);
 /**
  * @swagger
  * /api/products/{id}:
@@ -106,7 +108,7 @@ router.post("/", createProduct);
  *    200:
  *     description: Product updated successfully
  */
-router.put("/:id", updateProduct);
+router.put("/:id", authMiddleware, isAdmin, updateProduct);
 /**
  * @swagger
  * /api/products/{id}:
@@ -123,6 +125,6 @@ router.put("/:id", updateProduct);
  *    200:
  *      description: Product deleted successfully
  */
-router.delete("/:id", removeProduct);
+router.delete("/:id", authMiddleware, isAdmin, removeProduct);
 
 module.exports = router;
