@@ -48,11 +48,11 @@ const AdminSidebar: React.FC = () => {
       icon: <FileTextOutlined />,
       label: <Link to="/admin/blogs">Blogs</Link>,
     },
-    {
-      key: '/admin/contacts',
-      icon: <MessageOutlined />,
-      label: <Link to="/admin/contacts">Contacts</Link>,
-    },
+    // {
+    //   key: '/admin/contacts',
+    //   icon: <MessageOutlined />,
+    //   label: <Link to="/admin/contacts">Contacts</Link>,
+    // },
     {
       key: 'home',
       icon: <HomeOutlined />,
